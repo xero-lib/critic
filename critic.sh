@@ -53,9 +53,9 @@ do
 						read -p "This name is invalid or already in use. Please enter another name: " name;
 					done
 					if $copy; then
-						cp $file $name
+						cp "$file" "$name"
 					else
-						mv $file $name
+						mv "$file" "$name"
 					fi
 				;;
 				* ) echo "Retaining original name" ;;
