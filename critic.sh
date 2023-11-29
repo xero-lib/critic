@@ -1,7 +1,12 @@
 #!/bin/env bash
-echo -n "What program should be used to preview the files? "
-read prog
+if [[ "$@" = "" ]]
+then
+	echo "critic: missing operand"
+	exit 1
+fi
 
+read -p "What program should be used to preview the files? " prog
+	
 if ! command -v $prog &> /dev/null 
 then
 	echo "Unable to find command \"$prog\""
