@@ -14,7 +14,7 @@ while getopts ":hac" option; do
 			fi
 			shift $(( OPTIND - 1 ))
 		;;
-		c) copy=true; shift $(( OPTIND - 1))  ;;
+		c) copy=true; shift $(( OPTIND - 1)) ;;
 		?) echo "error: option -$OPTARG not found"; exit 1 ;;
 	esac
 done
