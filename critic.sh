@@ -1,5 +1,5 @@
 #!/bin/env bash
-if [[ "$@" = "" ]]
+if [ $# -eq 0 ]
 then
 	echo "critic: missing operand"
 	exit 1
