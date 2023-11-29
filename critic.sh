@@ -1,17 +1,41 @@
 #!/bin/env bash
+
+auto=false
+copy=false
+
+while getopts ":hac" option; do
+	case $option in
+		h) echo -e "usage: $0 [-h] [-a] [-c] file(s)\n\t-h: display this help section\n\t-a: automatically determine program to use when previewing files (useful for previewing multiple filetypes)\n\t-c: copy instead of move"; exit ;;
+		a) 
+			if command -v xdg-open &> /dev/null; then
+				auto=true
+			else
+				echo "Unable to find xdg-open for automatic file detection"
+			fi
+			shift $(( OPTIND - 1 ))
+		;;
+		c) copy=true; shift $(( OPTIND - 1))  ;;
+		?) echo "error: option -$OPTARG not found";
+	esac
+done
+
 if [ $# -eq 0 ]
 then
 	echo "critic: missing operand"
 	exit 1
 fi
 
-read -p "What program should be used to preview the files? " prog
-	
-if ! command -v $prog &> /dev/null 
-then
-	echo "Unable to find command \"$prog\""
-	exit 1
+if $auto; then
+	prog="xdg-open"
+else
+	read -p "What program should be used to preview the files? " prog
+	if ! command -v $prog &> /dev/null 
+	then
+		echo "Unable to find command \"$prog\""
+		exit 1
+	fi
 fi
+
 
 for file in "$@"
 do
@@ -28,7 +52,11 @@ do
 					while [ -f "$name" ] || [ "$name" = "" ]; do
 						read -p "This name is invalid or already in use. Please enter another name: " name;
 					done
-					mv $file $name
+					if $copy; then
+						cp $file $name
+					else
+						mv $file $name
+					fi
 				;;
 				* ) echo "Retaining original name" ;;
 			esac
